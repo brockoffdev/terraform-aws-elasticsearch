@@ -1,6 +1,6 @@
 module "label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.5.3"
-  enabled    = "${var.enabled == "true" ? 1 : 0}"
+  enabled    = "${var.enabled}"
   namespace  = "${var.namespace}"
   name       = "${var.name}"
   stage      = "${var.stage}"
@@ -11,7 +11,7 @@ module "label" {
 
 module "user_label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.5.3"
-  enabled    = "${var.enabled == "true" ? 1 : 0}"
+  enabled    = "${var.enabled}"
   namespace  = "${var.namespace}"
   name       = "${var.name}"
   stage      = "${var.stage}"
@@ -194,7 +194,7 @@ data "aws_iam_policy_document" "allowed_ips" {
 data "aws_iam_policy_document" "default" {
   count = "${var.enabled == "true" ? 1 : 0}"
 
-  #source_json = "${join("", data.aws_iam_policy_document.allowed_ips.*.json)}"
+  source_json = "${join("", data.aws_iam_policy_document.allowed_ips.*.json)}"
 
   statement {
     sid = "AllowByIAMRole"
