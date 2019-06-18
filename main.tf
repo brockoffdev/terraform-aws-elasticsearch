@@ -1,6 +1,6 @@
 module "label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.5.3"
-  enabled    = "${var.enabled}"
+  enabled    = "${var.enabled == "true" ? 1 : 0}"
   namespace  = "${var.namespace}"
   name       = "${var.name}"
   stage      = "${var.stage}"
@@ -11,7 +11,7 @@ module "label" {
 
 module "user_label" {
   source     = "git::https://github.com/cloudposse/terraform-null-label.git?ref=tags/0.5.3"
-  enabled    = "${var.enabled}"
+  enabled    = "${var.enabled == "true" ? 1 : 0}"
   namespace  = "${var.namespace}"
   name       = "${var.name}"
   stage      = "${var.stage}"
