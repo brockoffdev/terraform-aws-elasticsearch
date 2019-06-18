@@ -194,7 +194,7 @@ data "aws_iam_policy_document" "allowed_ips" {
 data "aws_iam_policy_document" "default" {
   count = "${var.enabled == "true" ? 1 : 0}"
 
-  source_json = "${join("", data.aws_iam_policy_document.allowed_ips.*.json)}"
+  #source_json = "${join("", data.aws_iam_policy_document.allowed_ips.*.json)}"
 
   statement {
     sid = "AllowByIAMRole"
