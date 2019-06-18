@@ -163,11 +163,13 @@ resource "aws_elasticsearch_domain" "default" {
   depends_on = ["aws_iam_service_linked_role.default"]
 }
 
-data "aws_iam_policy_document" "default" {
-  count = "${var.enabled == "true" ? 1 : 0}"
+data "aws_iam_policy_document" "allowed_ips" {
+  count = "${var.enabled == "true" && length(var.es_domain_allowed_ip_ranges) > 0 ? 1 : 0}"
 
   statement {
-    actions = ["${distinct(compact(var.iam_actions))}"]
+    sid = "AllowByIpRange"
+
+    actions = ["${distinct(compact(var.es_domain_allowed_ip_ranges_actions))}"]
 
     resources = [
       "${join("", aws_elasticsearch_domain.default.*.arn)}",
@@ -176,7 +178,35 @@ data "aws_iam_policy_document" "default" {
 
     principals {
       type        = "AWS"
-      identifiers = ["${distinct(compact(concat(var.iam_role_arns, aws_iam_role.elasticsearch_user.*.arn)))}"]
+      identifiers = "*"
+    }
+
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIP"
+      values   = ["${distinct(compact(var.es_domain_allowed_ip_ranges))}"]
+    }
+  }
+}
+
+data "aws_iam_policy_document" "default" {
+  count = "${var.enabled == "true" ? 1 : 0}"
+
+  source_json = "${join("", data.aws_iam_policy_document.allowed_ips.*.json)}"
+
+  statement {
+    sid = "AllowByIAMRole"
+
+    actions = ["${distinct(compact(var.es_domain_allowed_iam_role_actions))}"]
+
+    resources = [
+      "${join("", aws_elasticsearch_domain.default.*.arn)}",
+      "${join("", aws_elasticsearch_domain.default.*.arn)}/*",
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["${distinct(compact(concat(var.es_domain_allowed_iam_role_arns, aws_iam_role.elasticsearch_user.*.arn)))}"]
     }
   }
 }

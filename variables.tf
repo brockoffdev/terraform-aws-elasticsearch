@@ -71,6 +71,32 @@ variable "elasticsearch_version" {
   description = "Version of Elasticsearch to deploy"
 }
 
+variable "es_domain_allowed_iam_role_arns" {
+  type        = "list"
+  default     = []
+  description = "List of IAM role ARNs to permit access to the Elasticsearch domain"
+}
+
+
+variable "es_domain_allowed_iam_role_actions" {
+  type        = "list"
+  default     = []
+  description = "List of actions to allow for the IAM roles, _e.g._ `es:ESHttpGet`, `es:ESHttpPut`, `es:ESHttpPost`"
+}
+
+variable "es_domain_allowed_ip_ranges" {
+  type        = "list"
+  default     = []
+  description = "List of IP Address Ranges to permit access to the Elasticsearch domain"
+}
+
+
+variable "es_domain_allowed_ip_ranges_actions" {
+  type        = "list"
+  default     = []
+  description = "List of actions to allow for the allowed IP Ranges, _e.g._ `es:ESHttpGet`, `es:ESHttpPut`, `es:ESHttpPost`"
+}
+
 variable "instance_type" {
   type        = "string"
   default     = "t2.small.elasticsearch"
@@ -82,22 +108,10 @@ variable "instance_count" {
   default     = 4
 }
 
-variable "iam_role_arns" {
-  type        = "list"
-  default     = []
-  description = "List of IAM role ARNs to permit access to the Elasticsearch domain"
-}
-
 variable "iam_authorizing_role_arns" {
   type        = "list"
   default     = []
   description = "List of IAM role ARNs to permit to assume the Elasticsearch user role"
-}
-
-variable "iam_actions" {
-  type        = "list"
-  default     = []
-  description = "List of actions to allow for the IAM roles, _e.g._ `es:ESHttpGet`, `es:ESHttpPut`, `es:ESHttpPost`"
 }
 
 variable "zone_awareness_enabled" {
