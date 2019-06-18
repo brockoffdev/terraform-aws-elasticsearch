@@ -187,6 +187,8 @@ data "aws_iam_policy_document" "allowed_ips" {
       values   = ["${distinct(compact(var.es_domain_allowed_ip_ranges))}"]
     }
   }
+
+  depends_on = ["aws_elasticsearch_domain.default"]
 }
 
 data "aws_iam_policy_document" "default" {
