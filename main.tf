@@ -92,7 +92,7 @@ data "aws_iam_policy_document" "assume_role" {
 
     principals {
       type        = "AWS"
-      identifiers = ["${compact(concat(var.iam_authorizing_role_arns, var.iam_role_arns))}"]
+      identifiers = ["${compact(concat(var.iam_authorizing_role_arns, var.es_domain_allowed_iam_role_arns))}"]
     }
 
     effect = "Allow"
