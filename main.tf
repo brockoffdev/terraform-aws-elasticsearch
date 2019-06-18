@@ -178,7 +178,7 @@ data "aws_iam_policy_document" "allowed_ips" {
 
     principals {
       type        = "AWS"
-      identifiers = "*"
+      identifiers = ["*"]
     }
 
     condition {
